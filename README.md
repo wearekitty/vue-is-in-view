@@ -28,8 +28,8 @@ It will add a global `VueIsInView` which can then be installed using
 ## Usage
 ### Using the `v-is-in-view` directive
 ```Vue
-  <figure v-touch:is-in-view></figure>
-  <div v-touch:is-in-view="{ showIfPartial: true }"></div>
+  <figure v-is-in-view></figure>
+  <div v-is-in-view="{ showIfPartial: true }"></div>
 ```
 
 ## Class conditions
