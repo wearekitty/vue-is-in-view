@@ -1,6 +1,6 @@
 {
-  "name": "is-in-view",
-  "version": "1.0.0",
+  "name": "vue-is-in-view",
+  "version": "1.0.1",
   "description": "Vue.js plugin to detect when elements are and have been in the viewport",
   "main": "dist/vue-is-in-view.js",
   "files": [
@@ -17,8 +17,15 @@
     "vue",
     "viewport"
   ],
-  "author": "We Are Kitty",
+  "author": {
+    "name": "We Are Kitty",
+    "url": "https://github.com/wearekitty"
+  },
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/wearekitty/vue-is-in-view.git"
+  },
   "devDependencies": {
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.0.2",
