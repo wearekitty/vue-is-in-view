@@ -1,0 +1,151 @@
+<!DOCTYPE HTML>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Vue Is In View Demo</title>
+    <script src="https://unpkg.com/animejs" type="text/javascript"></script>
+    <script src="https://unpkg.com/vue" type="text/javascript"></script>
+    <script src="https://unpkg.com/vue-is-in-view" type="text/javascript"></script>
+    <style type="text/css">
+      body {
+        margin: 0;
+      }
+
+      #app {
+        height: 200vh;
+      }
+
+      .header {
+        height: 50vh;
+        opacity: 0;
+        transition: opacity 2s;
+        margin: 0;
+        will-change: opacity;
+        padding: 2em;
+        box-sizing: border-box;
+        font-family: sans-serif;
+      }
+
+      h2 {
+        color: #fff;
+      }
+
+      .header.has-been-fully-in-view {
+        opacity: 0.2;
+      }
+
+      .header.is-in-view {
+        opacity: 1;
+      }
+
+      h1 {
+        background-color: rgba(65, 184, 131, 1);
+      }
+
+      h2 {
+        background-color: rgba(0, 0, 0, 1);
+      }
+
+      h3 {
+        background-color: rgba(53, 73, 94, 1);
+      }
+
+      h4 {
+        background-color: rgba(65, 184, 131, 1);
+      }
+
+      h5 {
+        background-color: rgba(255, 255, 255, 1);
+      }
+
+      .header span {
+        transform: translateY(-100%);
+        will-change: transform;
+        display: inline-block;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app"></div>
+
+    <script type="text/x-template" id="app-template">
+      <div>
+        <component
+          v-for="i in 5"
+          :is="'h' + i"
+          v-is-in-view="{ callback: runAnime }"
+          :ref="'h' + i"
+          class="header"
+          :id="'h' + i"
+          :data-index="i"
+        >
+          Header {{ i }}
+        </component>
+      </div>
+    </script>
+
+    <script type="text/javascript">
+      /* eslint-disable */
+      Vue.use(VueIsInView.default);
+
+      var root = new Vue({
+        el: '#app',
+        template: '#app-template',
+        data: function data() {
+          return {
+            animations: [],
+          };
+        },
+        created: function created() {
+          for(var i = 0; i < 5; i += 1) {
+            this.animations[i] = false;
+          }
+        },
+        methods: {
+          runAnime: function runAnime(isInView, element) {
+            var that = this;
+            if (isInView) {
+              if (this.animations[parseInt(element.dataset.index, 10) - 1]) {
+                return;
+              }
+
+              anime({
+                targets: '#' + element.id + ' span',
+                translateY: '0%',
+                autoplay: true,
+                duration: function(el, i) { return 500 + (i * 500); },
+                complete: function complete() {
+                  that.animations[parseInt(element.dataset.index, 10) - 1] = false;
+                },
+              });
+            } else {
+              anime({
+                targets: '#' + element.id + ' span',
+                translateY: '-100%',
+                autoplay: true,
+                delay: function(el, i) { return 1000 + (i * 100); },
+                duration: function(el, i) { return 500 + (i * 500); },
+                complete: function complete() {
+                  that.animations[parseInt(element.dataset.index, 10) - 1] = false;
+                },
+              });
+            }
+            this.animations[parseInt(element.dataset.index, 10) - 1] = true;
+          },
+        },
+        mounted: function mounted() {
+          for(var i = 0; i < 5; i += 1) {
+            var el = this.$refs['h' + (i + 1)][0];
+            var text = el.textContent.trim().split('');
+            el.textContent = '';
+            text.forEach(function (char) {
+              var span = document.createElement('span');
+              span.textContent = char;
+              el.appendChild(span);
+            });
+          }
+        },
+      });
+    </script>
+  </body>
+</html>

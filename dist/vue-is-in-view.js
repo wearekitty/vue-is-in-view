@@ -95,7 +95,6 @@ var Watcher = function () {
     window.addEventListener('scroll', this.update.bind(this));
     window.addEventListener('resize', this.resize.bind(this));
     this.resize();
-    this.update();
   }
 
   _createClass(Watcher, [{
@@ -114,8 +113,8 @@ var Watcher = function () {
         var elementBottomPosition = elementTopPosition + elementHeight;
 
         if (settings.showIfPartial) {
-          if (elementTopPosition > 0 && elementTopPosition < _this.windowHeight || elementBottomPosition > 0 && elementBottomPosition < _this.windowHeight) {
-            if (typeof settings.callback === 'function') settings.callback();
+          if (elementTopPosition >= 0 && elementTopPosition <= _this.windowHeight || elementBottomPosition >= 0 && elementBottomPosition <= _this.windowHeight) {
+            if (typeof settings.callback === 'function') settings.callback(element);
             element.classList.add('is-partially-in-view');
             element.classList.add('has-been-partially-in-view');
           } else {
@@ -124,13 +123,14 @@ var Watcher = function () {
           }
         }
 
-        if (elementBottomPosition < _this.windowHeight && elementTopPosition < _this.windowHeight && elementBottomPosition > 0 && elementTopPosition > 0) {
+        if (elementBottomPosition <= _this.windowHeight && elementTopPosition <= _this.windowHeight && elementBottomPosition >= 0 && elementTopPosition >= 0) {
           if (element.classList.contains('is-in-view')) return;
-          if (typeof settings.callback === 'function') settings.callback();
+          if (typeof settings.callback === 'function') settings.callback(true, element);
           element.classList.add('is-in-view');
           element.classList.add('has-been-fully-in-view');
         } else {
           if (!element.classList.contains('is-in-view')) return;
+          if (typeof settings.callback === 'function') settings.callback(false, element);
           element.classList.remove('is-in-view');
         }
       });
@@ -161,11 +161,12 @@ var watcher = new Watcher();
 
 IsInView.install = function (Vue) {
   Vue.directive('is-in-view', {
-    bind: function bind(el, binding) {
-      var value = binding.value;
+    bind: function bind(el, _ref, vnode) {
+      var value = _ref.value;
 
-      watcher.addElement(el, value);
-      watcher.update();
+      vnode.context.$nextTick(function () {
+        watcher.addElement(el, value);
+      });
     }
   });
 };
