@@ -8,6 +8,7 @@ class Watcher {
     window.addEventListener('scroll', this.update.bind(this));
     window.addEventListener('resize', this.resize.bind(this));
     this.resize();
+    this.update();
   }
 
   update() {
@@ -23,10 +24,10 @@ class Watcher {
         settings.showIfPartial
       ) {
         if (
-          ((elementTopPosition >= 0) && (elementTopPosition <= this.windowHeight)) ||
-          ((elementBottomPosition >= 0) && (elementBottomPosition <= this.windowHeight))
+          ((elementTopPosition > 0) && (elementTopPosition < this.windowHeight)) ||
+          ((elementBottomPosition > 0) && (elementBottomPosition < this.windowHeight))
         ) {
-          if (typeof settings.callback === 'function') settings.callback(element);
+          if (typeof settings.callback === 'function') settings.callback();
           element.classList.add('is-partially-in-view');
           element.classList.add('has-been-partially-in-view');
         } else {
@@ -36,18 +37,17 @@ class Watcher {
       }
 
       if (
-        (elementBottomPosition <= this.windowHeight) &&
-        (elementTopPosition <= this.windowHeight) &&
-        (elementBottomPosition >= 0) &&
-        (elementTopPosition >= 0)
+        (elementBottomPosition < this.windowHeight) &&
+        (elementTopPosition < this.windowHeight) &&
+        (elementBottomPosition > 0) &&
+        (elementTopPosition > 0)
       ) {
         if (element.classList.contains('is-in-view')) return;
-        if (typeof settings.callback === 'function') settings.callback(true, element);
+        if (typeof settings.callback === 'function') settings.callback();
         element.classList.add('is-in-view');
         element.classList.add('has-been-fully-in-view');
       } else {
         if (!element.classList.contains('is-in-view')) return;
-        if (typeof settings.callback === 'function') settings.callback(false, element);
         element.classList.remove('is-in-view');
       }
     });
@@ -71,10 +71,10 @@ const watcher = new Watcher();
 
 IsInView.install = (Vue) => {
   Vue.directive('is-in-view', {
-    bind(el, { value }, vnode) {
-      vnode.context.$nextTick(() => {
-        watcher.addElement(el, value);
-      });
+    bind(el, binding) {
+      const { value } = binding;
+      watcher.addElement(el, value);
+      watcher.update();
     },
   });
 };
