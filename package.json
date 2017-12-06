@@ -1,6 +1,6 @@
 {
   "name": "vue-is-in-view",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Vue.js plugin to detect when elements are and have been in the viewport",
   "main": "dist/vue-is-in-view.js",
   "files": [
