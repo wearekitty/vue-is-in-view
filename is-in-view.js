@@ -63,7 +63,6 @@ class Watcher {
       element,
       settings,
     });
-    this.update();
   }
 }
 
@@ -74,7 +73,10 @@ IsInView.install = (Vue) => {
     bind(el, binding) {
       const { value } = binding;
       watcher.addElement(el, value);
-      watcher.update();
+
+      Vue.nextTick(() => {
+        watcher.update();
+      });
     },
   });
 };

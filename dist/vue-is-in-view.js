@@ -150,7 +150,6 @@ var Watcher = function () {
         element: element,
         settings: settings
       });
-      this.update();
     }
   }]);
 
@@ -165,7 +164,10 @@ IsInView.install = function (Vue) {
       var value = binding.value;
 
       watcher.addElement(el, value);
-      watcher.update();
+
+      Vue.nextTick(function () {
+        watcher.update();
+      });
     }
   });
 };
