@@ -30,7 +30,10 @@ It will add a global `VueIsInView` which can then be installed using
 ### Using the `v-is-in-view` directive
 ```Vue
   <figure v-is-in-view></figure>
-  <div v-is-in-view="{ showIfPartial: true, callback: function() { console.log('in view!') }"></div>
+  <div v-is-in-view="{
+    showIfPartial: true,
+    callback: function(element) { console.log(element, 'in view!') }
+  }"></div>
 ```
 
 ## Class conditions
