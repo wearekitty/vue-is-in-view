@@ -7,7 +7,7 @@
 		exports["VueIsInView"] = factory();
 	else
 		root["VueIsInView"] = factory();
-})(this, function() {
+})(typeof self !== 'undefined' ? self : this, function() {
 return /******/ (function(modules) { // webpackBootstrap
 /******/ 	// The module cache
 /******/ 	var installedModules = {};
@@ -95,6 +95,7 @@ var Watcher = function () {
     window.addEventListener('scroll', this.update.bind(this));
     window.addEventListener('resize', this.resize.bind(this));
     this.resize();
+    this.update();
   }
 
   _createClass(Watcher, [{
@@ -125,12 +126,11 @@ var Watcher = function () {
 
         if (elementBottomPosition <= _this.windowHeight && elementTopPosition <= _this.windowHeight && elementBottomPosition >= 0 && elementTopPosition >= 0) {
           if (element.classList.contains('is-in-view')) return;
-          if (typeof settings.callback === 'function') settings.callback(true, element);
+          if (typeof settings.callback === 'function') settings.callback(element);
           element.classList.add('is-in-view');
           element.classList.add('has-been-fully-in-view');
         } else {
           if (!element.classList.contains('is-in-view')) return;
-          if (typeof settings.callback === 'function') settings.callback(false, element);
           element.classList.remove('is-in-view');
         }
       });
@@ -161,12 +161,11 @@ var watcher = new Watcher();
 
 IsInView.install = function (Vue) {
   Vue.directive('is-in-view', {
-    bind: function bind(el, _ref, vnode) {
-      var value = _ref.value;
+    bind: function bind(el, binding) {
+      var value = binding.value;
 
-      vnode.context.$nextTick(function () {
-        watcher.addElement(el, value);
-      });
+      watcher.addElement(el, value);
+      watcher.update();
     }
   });
 };

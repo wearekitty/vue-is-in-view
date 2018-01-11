@@ -5,7 +5,7 @@
     <title>Vue Is In View Demo</title>
     <script src="https://unpkg.com/animejs" type="text/javascript"></script>
     <script src="https://unpkg.com/vue" type="text/javascript"></script>
-    <script src="https://unpkg.com/vue-is-in-view" type="text/javascript"></script>
+    <script src="../dist/vue-is-in-view.js" type="text/javascript"></script>
     <style type="text/css">
       body {
         margin: 0;
@@ -71,13 +71,14 @@
     <script type="text/x-template" id="app-template">
       <div>
         <component
-          v-for="i in 5"
-          :is="'h' + i"
-          v-is-in-view="{ callback: runAnime }"
-          :ref="'h' + i"
           class="header"
+          v-for="i in 5"
+          v-is-in-view="{ callback: runAnime }"
+          :is="'h' + i"
+          :ref="'h' + i"
           :id="'h' + i"
           :data-index="i"
+          :key="i"
         >
           Header {{ i }}
         </component>
@@ -102,9 +103,9 @@
           }
         },
         methods: {
-          runAnime: function runAnime(isInView, element) {
+          runAnime: function runAnime(element) {
             var that = this;
-            if (isInView) {
+            if (element.classList.contains('.is-in-view')) {
               if (this.animations[parseInt(element.dataset.index, 10) - 1]) {
                 return;
               }

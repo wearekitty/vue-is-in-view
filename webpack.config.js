@@ -1,12 +1,15 @@
-var path = require('path');
-var webpack = require('webpack');
+const path = require('path');
+const UglifyJsPlugin = require('uglifyjs-webpack-plugin');
 
 module.exports = {
   devtool: 'source-map',
-  entry: './is-in-view.js',
+  entry: {
+    'vue-is-in-view': './is-in-view.js',
+    'vue-is-in-view.min': './is-in-view.js',
+  },
   output: {
     path: path.resolve(__dirname, 'dist'),
-    filename: 'vue-is-in-view.js',
+    filename: '[name].js',
     library: 'VueIsInView',
     libraryTarget: 'umd',
   },
@@ -27,10 +30,18 @@ module.exports = {
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: "eslint-loader",
+        loader: 'eslint-loader',
       },
     ],
   },
+  plugins: [
+    new UglifyJsPlugin({
+      test: /\.js($|\?)/i,
+      include: /\.min\.js$/,
+      sourceMap: true,
+      parallel: true,
+    }),
+  ],
   resolveLoader: {
     modules: [path.join(__dirname, 'node_modules')],
   },
