@@ -1,4 +1,5 @@
 # Vue Is In View
+[![npm version](https://img.shields.io/npm/v/vue-is-in-view.svg)](https://www.npmjs.com/package/vue-is-in-view) [![npm downloads](https://img.shields.io/npm/dt/vue-is-in-view.svg)](https://www.npmjs.com/package/vue-is-in-view) [![vue version](https://img.shields.io/badge/vue-2.x-brightgreen.svg)](https://vuejs.org)
 > Vue.js plugin to detect when elements are and have been in the viewport
 For Vue 2.0.
 
